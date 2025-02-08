@@ -39,4 +39,6 @@ while True:
 
 The camera can be connected with different [interfaces](interfaces.md). Use I2C with 3k3 pullup for SDA and SCL to 3.3V.
 
+![](wiring.jpg)
+
 
