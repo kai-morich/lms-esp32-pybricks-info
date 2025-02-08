@@ -5,7 +5,7 @@ This repo provides some info on using [LMS-ESP32v2 board](https://www.antonsmind
 * [Strapping Pins](docs/strapping-pins.md)
 
 # Examples
-* Minimalistic
-* Geekservo
-* TOF sensor VL53L0X
-* PixyCam2
+* [Minimal](minimal)
+* [Geekservo](servo)
+* [ToF laser distance sensor VL53L0X](vl53l0x)
+* [PixyCam2](pixy2)
