@@ -9,6 +9,8 @@ Depending on the value of the LEGO force sensor, the led will vary from green to
 - Lego Spike with Pybricks firmware
 - LMS-ESP32v2 board from [https://www.antonsmindstorms.com/] with MicroPython firmware
 
+![](hardware.jpg)
+
 # Steps
 
 ## LMS-ESP32
