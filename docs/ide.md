@@ -2,10 +2,10 @@
 
 Start simple with [Thonny](https://thonny.org/). Thonny typically edits files directly on the device, so you have no local copy.
 
-# VS code + Pymakr
+# VS Code + Pymakr
 
-To have a local copy, git integration, ... use VS code with Pymakr extension. The extension is not updated for 3 years, but works ok.
-Usage is a bit obscure, you basically need these 3 underlined buttons in the Explorer tree that are only shown when hovering over the line.
+To have a local copy, git integration, ... use VS Code with _Pymakr Preview_ extension. The extension is not updated since late 2022, but works ok.
+Usage is a bit obscure, after configured you basically need these 3 underlined buttons in the Explorer tree that are only shown when hovering over the line.\
 ![](pymakr.png)
 
 For syntax highlighting add the micropython-esp32-stubs to your `typings` folder as described [here](https://micropython-stubs.readthedocs.io/en/main/) and
