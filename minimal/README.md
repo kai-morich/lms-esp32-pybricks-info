@@ -1,3 +1,7 @@
+> [!NOTE]
+> I had sent this example to Anton. He created a similar example [here](https://www.antonsmindstorms.com/2025/02/09/get-started-with-lms-esp32-set-the-rgb-led-from-a-spike-hub/).
+>
+
 # Minimal Example
 
 Minimalistic example for Lego Spike with Pybricks + LMS-ESP32 board using the onboard neopixel.
