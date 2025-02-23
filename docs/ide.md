@@ -4,7 +4,8 @@ Start simple with [Thonny](https://thonny.org/). Thonny typically edits files di
 
 # VS Code + Pymakr
 
-To have a local copy, git integration, ... use VS Code with _Pymakr Preview_ extension. The extension is not updated since late 2022, but works ok.
+To have a local copy, git integration, ... use VS Code with _Pymakr Preview_ extension. The extension is not updated since late 2022, but works most of the time. 
+Sometimes gets stuck during file transfer and only solution I found so far is restarting VS code.
 Usage is a bit obscure, after configured you basically need these 3 underlined buttons in the Explorer tree that are only shown when hovering over the line.\
 ![](pymakr.png)
 
