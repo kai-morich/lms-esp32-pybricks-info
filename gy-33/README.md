@@ -64,6 +64,8 @@ and create `gycolor.py` with content from this repo.
 
 The GY-33 sensor can be hot-glued into a Lego 87408 U connector, with 1/2 mm distance to ground. For better fit in the side rails, cut off the overhang on the upper side.
 
+![PXL_20250316_161646076~4](https://github.com/user-attachments/assets/4514fe1f-032d-4448-a16c-a14a0736af55) ![PXL_20250316_160247592~4](https://github.com/user-attachments/assets/e375d78f-76c9-4f69-8d3e-c019b2a6a405)
+
 ## Comparison
 
 - Communication with the LMS-ESP32 is slow, but the effective sample rate is nearly comparable to the Lego color sensor.
