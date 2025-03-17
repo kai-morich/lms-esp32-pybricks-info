@@ -25,7 +25,7 @@ def rgbc_to_hsv(r, g, b, c):
     h, s, v = rgb_to_hsv(r, g, b)
     return h, s, c
 
-def rgbc_to_hsv_Color(r, g, b, c, c_max=3000) -> Color:
+def rgbc_to_hsv_Color(r, g, b, c, c_max=3200) -> Color:
     h, s, v = rgb_to_hsv(r, g, b)
     return Color(h*360, s*100, c*100/c_max)
 
