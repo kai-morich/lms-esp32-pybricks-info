@@ -50,8 +50,8 @@ rh.add_command('gyLed', '', 'B')
 rh.call('gyLed', 10)
 
 while True:
-    gyRaw = rh.call('gyGet') # GY-33 color sensor. takes 13.5msec, dominated by communication with LMS-ESP32
-    csHsv = cs.hsv()         # Lego color sensor. takes 0.04msec, but new value only each ~10msec
+    gyRaw = rh.call('gyGet') # GY-33 color sensor
+    csHsv = cs.hsv()         # Lego color sensor
     csCol = cs.color()
     gyHsv = gycolor.rgbc_to_hsv_Color(*gyRaw)
     gyCol = gycolor.hsv_to_standard_Color(gyHsv)
@@ -68,11 +68,10 @@ The GY-33 sensor can be hot-glued into a Lego 87408 U connector, with 1/2 mm dis
 
 ## Comparison
 
-- Communication with the LMS-ESP32 is slow, but the effective sample rate is nearly comparable to the Lego color sensor.
-- When using LMS-ESP32 attached sensors, e.g. in a PID based line follower, you can remove the usual `wait(10)` as the communication already takes that time.
+- A call to the GY-33 typically takes 13.5msec, a new value is returned each ~100msec, which is the default integration time for the TCS34725.
+- A call to the Lego sensor takes 0.04msec, a new value is returned each ~10msec.
 - The Lego sensor is best places 1 beam from the ground, the GY33 sensor basically at the ground.
-- With the lens mount the GY33 is protected against ambient light, for other TCS3472 based sensors you would have to 3D print yourself.
-- the sharpness off black & white separation is comparable: ![grafik](https://github.com/user-attachments/assets/10cb9b68-1c06-4907-8140-c1736c47744f)
-- I would have expected a significant advantage for the Lego sensor due to its integrated optics and the LEDs outside the optics. Values look better but not significant.
+- With the lens mount the GY-33 is protected against ambient light, for other TCS3472 based sensors you would have to 3D print yourself.
+- the sharpness off black & white separation is comparable. I would have expected a significant advantage for the Lego sensor due to its integrated optics and the LEDs outside the optics. Values look better but not significant: ![grafik](https://github.com/user-attachments/assets/10cb9b68-1c06-4907-8140-c1736c47744f).
 
 
