@@ -68,10 +68,12 @@ The GY-33 sensor can be hot-glued into a Lego 87408 U connector, with 1/2 mm dis
 
 ## Comparison
 
-- A call to the GY-33 typically takes 13.5msec, a new value is returned each ~100msec, which is the default integration time for the TCS34725.
+- A call to the GY-33 typically takes 13.5msec, a new value is returned each ~100msec, which is the default integration time for the TCS3472.
 - A call to the Lego sensor takes 0.04msec, a new value is returned each ~10msec.
 - The Lego sensor is best places 1 beam from the ground, the GY33 sensor basically at the ground.
 - With the lens mount the GY-33 is protected against ambient light, for other TCS3472 based sensors you would have to 3D print yourself.
 - the sharpness off black & white separation is comparable. I would have expected a significant advantage for the Lego sensor due to its integrated optics and the LEDs outside the optics. Values look better but not significant: ![grafik](https://github.com/user-attachments/assets/10cb9b68-1c06-4907-8140-c1736c47744f).
-
+- The code above uses the library from `QuirkyCort`. This first communicates with the microcontroller on the back of the board which then communicates with the TCS3472.
+  - TODO: try serial instead of I2C communication as only this can set integration time and gain.
+  - TODO: try a different library and the other pins to directly communicate with the TCS3472.
 
