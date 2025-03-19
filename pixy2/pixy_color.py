@@ -7,15 +7,12 @@ class Color:
     GREEN = 4
     BLUE = 5
 
-# no Enum class in micropython so we have to stringify ourself
-def color_name(c:Color) -> str:
-    if c == Color.BLACK: return 'black'
-    if c == Color.WHITE: return 'white'
-    if c == Color.RED: return 'red'
-    if c == Color.YELLOW: return 'yellow'
-    if c == Color.GREEN: return 'green'
-    if c == Color.BLUE: return 'blue'
-    return 'unknown'
+    # no Enum class in micropython so we have to stringify ourself
+    @staticmethod
+    def name(color):
+        for k,v in __class__.__dict__.items():
+            if v==color: return k
+        return None
 
 # copied from python stdlib colorsys.py
 def rgb_to_hsv(r, g, b):
