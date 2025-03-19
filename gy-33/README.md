@@ -73,7 +73,10 @@ The GY-33 sensor can be hot-glued into a Lego 87408 U connector, with 1/2 mm dis
 - The Lego sensor is best places 1 beam from the ground, the GY33 sensor basically at the ground.
 - With the lens mount the GY-33 is protected against ambient light, for other TCS3472 based sensors you would have to 3D print yourself.
 - the sharpness off black & white separation is comparable. I would have expected a significant advantage for the Lego sensor due to its integrated optics and the LEDs outside the optics. Values look better but not significant: ![grafik](https://github.com/user-attachments/assets/10cb9b68-1c06-4907-8140-c1736c47744f).
+
+## Todo
+- Compare linefollower with both sensors. Is 10Hz sample rate enough?
 - The code above uses the library from `QuirkyCort`. This first communicates with the microcontroller on the back of the board which then communicates with the TCS3472.
-  - TODO: try serial instead of I2C communication as only this can set integration time and gain.
-  - TODO: try a different library and the other pins to directly communicate with the TCS3472.
+  - Try serial instead of I2C communication as only this can set integration time and gain.
+  - Try a different library and the other pins to directly communicate with the TCS3472.
 
