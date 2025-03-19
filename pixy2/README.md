@@ -23,7 +23,7 @@ while True:
     r,g,b = pixy.get_rgb(resx//2, resy//2, 0)
     h,s,v = pixy_color.rgb_to_hsv(r,g,b)
     c = pixy_color.hsv_to_color(h,s,v)
-    cn = pixy_color.color_name(c)
+    cn = pixy_color.Color.name(c)
     print(f'rgb : {r:3} {g:3} {b:3}    hsv : {int(h*360):3} {int(s*100):3} {v:3}    color : {cn}')
     np[0] = (r,g,b)
     np.write()
