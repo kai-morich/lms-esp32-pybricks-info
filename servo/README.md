@@ -1,6 +1,8 @@
 Using grey 3x3x5 sized _Geekservo_ 360° servos with [Antons servo module](https://docs.antonsmindstorms.com/en/latest/Software/mpy_robot_tools.html#mpy-robot-tools-servo-module).
 
-[Here](https://shop.pimoroni.com/products/geekservo-building-bricks-360-degree-servo) the best data sheet I could find for the servo. Takes ~1 second for 360° degrees.
+[Here](https://shop.pimoroni.com/products/geekservo-building-bricks-360-degree-servo) the best data sheet I could find for the servo. 
+
+Pybricks has an optional `wait=True|False` parameter for Lego motors, but here the `rs.call()` always behaves like `wait=False`, so you have to add an appropriate `wait(msec)` if you want to wait until the movement is finished. According to the data sheet it needs 0.14 seconds per 60° degrees rotation. This matches my observation of roughly ~1 second for full 360° degrees. 
 
 ## LMS-ESP32 code:
 
