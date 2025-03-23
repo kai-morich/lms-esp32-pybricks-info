@@ -40,7 +40,7 @@ from pybricks.pupdevices import ColorSensor
 from pybricks.parameters import Port
 from pybricks.tools import wait, StopWatch
 from pupremote_hub import PUPRemoteHub # copy from https://github.com/antonvh/PUPRemote/blob/main/src/pupremote_hub.py
-import gycolor
+import gy33_color # copy from example folder
 
 sw = StopWatch()
 cs = ColorSensor(Port.F)
@@ -53,18 +53,16 @@ while True:
     gyRaw = rh.call('gyGet') # GY-33 color sensor
     csHsv = cs.hsv()         # Lego color sensor
     csCol = cs.color()
-    gyHsv = gycolor.rgbc_to_hsv_Color(*gyRaw)
-    gyCol = gycolor.hsv_to_standard_Color(gyHsv)
+    gyHsv = gy33_color.rgbc_to_hsv_Color(*gyRaw)
+    gyCol = gy33_color.hsv_to_standard_Color(gyHsv)
     print(sw.time(), csHsv, csCol, '--', gyRaw, gyHsv, gyCol, sep=', ')
 ```
 
-and create `gycolor.py` with content from this repo.
+and create `gy33_color.py` with content from this repo.
 
 ## Mounting the GY-33
 
-The GY-33 sensor can be hot-glued into a Lego 87408 U connector, with 1/2 mm distance to ground. For better fit in the side rails, cut off the overhang on the upper side.
-
-![PXL_20250316_161646076~4](https://github.com/user-attachments/assets/4514fe1f-032d-4448-a16c-a14a0736af55) ![PXL_20250316_160247592~4](https://github.com/user-attachments/assets/e375d78f-76c9-4f69-8d3e-c019b2a6a405)
+t.b.d.
 
 ## Comparison
 
