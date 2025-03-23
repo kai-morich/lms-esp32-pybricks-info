@@ -36,7 +36,7 @@ try:
             pixy.get_version()
             break
         except:
-            if time.ticks_ms() > t + 5000: raise
+            if time.ticks_ms() - t > 5000: raise
 except Exception as e:
     np[0] = (255, 0, 0); np.write() # red = error
     raise
