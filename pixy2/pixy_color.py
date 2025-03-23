@@ -1,18 +1,4 @@
-
-class Color:
-    BLACK = 0
-    WHITE = 1
-    RED = 2
-    YELLOW = 3
-    GREEN = 4
-    BLUE = 5
-
-    # no Enum class in micropython so we have to stringify ourself
-    @staticmethod
-    def name(color):
-        for k,v in __class__.__dict__.items():
-            if v==color: return k
-        return None
+from pybricks.parameters import Color
 
 # copied from python stdlib colorsys.py
 def rgb_to_hsv(r, g, b):
@@ -35,7 +21,6 @@ def rgb_to_hsv(r, g, b):
     h = (h/6.0) % 1.0
     return h, s, v
 
-# adjust per use case
 def hsv_to_color(h, s, v):
     if s < 0.5:
         if v > 50: return Color.WHITE
@@ -44,5 +29,5 @@ def hsv_to_color(h, s, v):
         h *= 360
         if h > 300 or h < 30: return Color.RED
         elif h < 75:          return Color.YELLOW
-        elif h < 195:         return Color.GREEN
+        elif h < 190:         return Color.GREEN
         else:                 return Color.BLUE        
