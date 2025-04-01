@@ -1,4 +1,4 @@
-Using the [Pixy2](https://pixycam.com/pixy2/) camera with [kai-morich/micropython-cmucam5](https://github.com/kai-morich/micropython-cmucam5) library.
+Using the [Pixy2](https://pixycam.com/pixy2/) camera with [indigoparadox/boxes_and_bots](https://github.com/indigoparadox/boxes_and_bots) library.
 
 ## LMS-ESP32 code:
 
