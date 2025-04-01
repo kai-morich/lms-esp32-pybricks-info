@@ -1,48 +1,45 @@
 Using the [Pixy2](https://pixycam.com/pixy2/) camera with [kai-morich/micropython-cmucam5](https://github.com/kai-morich/micropython-cmucam5) library.
 
 ## LMS-ESP32 code:
-with full error handling:
+
 ```python
 from neopixel import NeoPixel 
 from machine import Pin, SoftI2C
 from pupremote import PUPRemoteSensor
-from pixy import CMUcam5 # copy from https://github.com/kai-morich/micropython-cmucam5/blob/main/pixy.py
+from pixy import CMUcam5 # copy from https://github.com/kai-morich/boxes_and_bots/blob/master/drivers/micropython/cmucam5/pixy.py
 import sys, time
 
-def pxLmp(a, b):
+np = NeoPixel(Pin(25), 1) # onboard neopixel
+def statusLed(r,g,b):
+    np[0] = r,g,b
+    np.write()
+
+def sLamp(a, b):
     pixy.set_lamp(a, b)
 
-def pxBrt(v):
+def sBrit(v):
     pixy.set_brightness(v)
 
-def pxRGB(x, y):
+def gRGB(x, y):
     return pixy.get_rgb(x, y, 0)
 
-np = NeoPixel(Pin(25), 1) # onboard neopixel
-np[0] = (255, 255, 0); np.write() # yellow = initialize
 try:
+    statusLed(0, 0, 255) # blue = connection wait
     rs = PUPRemoteSensor(power=True)
-    rs.add_command('pxLmp', '', 'bb')
-    rs.add_command('pxBrt', '', 'B')
-    rs.add_command('pxRGB', 'BBB', 'HB')
+    rs.add_command('sLamp', '', 'bb')
+    rs.add_command('sBrit', '', 'B')
+    rs.add_command('gRGB', 'BBB', 'HB')
     rs.process()
 
-    # PixyMon->Configure->Interface=I2C + 0x54
-    pixy = CMUcam5(SoftI2C(freq=1000000, scl=Pin(32), sda=Pin(33))) # with 3k3 pullup each to 3.3V
-    t = time.ticks_ms()
-    while True:
-        try:
-            rs.process() # power turned off after some time w/o heartbeat
-            pixy.get_version()
-            break
-        except:
-            if time.ticks_ms() - t > 5000: raise
+    statusLed(255, 255, 0) # yellow = initialize
+    # PixyMon->Configure->Interface=I2C + address 0x54, scl+sda with 3k3 pull-up each to 3.3V
+    pixy = CMUcam5(SoftI2C(freq=1000000, scl=Pin(32), sda=Pin(33)))
+    pixy.init(callback=rs.process) # power turned off w/o periodic heartbeat
 except Exception as e:
-    np[0] = (255, 0, 0); np.write() # red = error
+    statusLed(255, 0, 0) # red = error
     raise
 
-
-np[0] = (0, 255, 0); np.write() # green = ready
+statusLed(0, 255, 0) # green = ready
 while True:
     try:
         rs.process()
@@ -50,30 +47,27 @@ while True:
         if isinstance(e, KeyboardInterrupt):
             break
         sys.print_exception(e)
-        np[0] = (255, 0, 0); np.write() # red = failed
+        statusLed(255, 0, 0) # red = failed
         time.sleep_ms(100)
-        np[0] = (0, 255, 0); np.write() # green = retry
+        statusLed(0, 255, 0) # green = retry
 ```
 
 ## Pybricks code:
 ```python
-from pybricks.pupdevices import ColorSensor
 from pybricks.parameters import Port
-from pybricks.tools import wait, StopWatch
 from pupremote_hub import PUPRemoteHub # copy from https://github.com/antonvh/PUPRemote/blob/main/src/pupremote_hub.py
 import pixy_color # copy from example folder
 
-sw = StopWatch()
-rh = PUPRemoteHub(Port.F)
-rh.add_command('pxLmp', '', 'bb')
-rh.add_command('pxBrt', '', 'B')
-rh.add_command('pxRGB', 'BBB', 'HB')
+rh = PUPRemoteHub(Port.A)
+rh.add_command('sLamp', '', 'bb')
+rh.add_command('sBrit', '', 'B')
+rh.add_command('gRGB', 'BBB', 'HB')
 
-rh.call('pxLmp', 1, 1)
-rh.call('pxBrt', 60)
+rh.call('sLamp', 1, 1)
+rh.call('sBrit', 60)
 
 while True:
-    r,g,b = rh.call('pxRGB', 150, 100)
+    r,g,b = rh.call('gRGB', 150, 100)
     h,s,v = pixy_color.rgb_to_hsv(r,g,b)
     c = pixy_color.hsv_to_color(h,s,v)
     print(f'rgb : {r:3} {g:3} {b:3}    hsv : {int(h*360):3} {int(s*100):3} {v:3}    color : {c}')
