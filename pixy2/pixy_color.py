@@ -21,6 +21,7 @@ def rgb_to_hsv(r, g, b):
     h = (h/6.0) % 1.0
     return h, s, v
 
+# adjust thresholds to your use case
 def hsv_to_color(h, s, v):
     if s < 0.5:
         if v > 50: return Color.WHITE
