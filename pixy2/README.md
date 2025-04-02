@@ -6,7 +6,7 @@ Using the [Pixy2](https://pixycam.com/pixy2/) camera with [indigoparadox/boxes_a
 from neopixel import NeoPixel 
 from machine import Pin, SoftI2C
 from pupremote import PUPRemoteSensor
-from pixy import CMUcam5 # copy from https://github.com/kai-morich/boxes_and_bots/blob/master/drivers/micropython/cmucam5/pixy.py
+from pixy import CMUcam5 # copy from https://github.com/indigoparadox/boxes_and_bots/blob/master/drivers/micropython/cmucam5/pixy.py
 import sys, time
 
 np = NeoPixel(Pin(25), 1) # onboard neopixel
@@ -73,7 +73,11 @@ while True:
     print(f'rgb : {r:3} {g:3} {b:3}    hsv : {int(h*360):3} {int(s*100):3} {v:3}    color : {c}')
 ```
 
+## Connections
+
 The camera can be connected with different [interfaces](interfaces.md). Use I2C with 3k3 pullup for SDA and SCL to 3.3V or connect in parallel with another I2C device already having integrated pullups.
+
+The camera permanently draws 240 mA. To preserve Spike battery capacity you should think about adding a powerbank to the LMS-ESP32 and initialize PUPRemoteSensor with power=False, then you can swap initialize/connect blocks and omit the callback.
 
 ![](wiring.jpg)
 
