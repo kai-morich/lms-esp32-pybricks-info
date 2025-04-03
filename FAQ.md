@@ -3,7 +3,7 @@
 [//]: ################################
 <details><summary>Performance</summary>
 
-Duration for a loop executing 1000 x [rgb_to_hsv](https://github.com/kai-morich/lms-esp32-pybricks-info/blob/main/gy-33/gycolor.py#L4):
+Duration for a loop executing 1000 x [rgb_to_hsv](https://github.com/kai-morich/lms-esp32-pybricks-info/blob/main/gy-33/gy33_color.py#L4):
 
 | Hardware | Duration [msec] |
 | --------- | --------- |
