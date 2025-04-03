@@ -53,5 +53,16 @@ Pins 0,2,12,15 at the [IO header](https://docs.antonsmindstorms.com/en/latest/Ha
 
 [//]: ################################
 <details><summary>5V Tolerance</summary>
-t.b.d.
+The datasheet says the maximum voltage at IO pins is 3.6V, so does not look 5V tolerant.
+Various sources on the web say that it is practically 5V tolerant.
+
+
+So should work with 5V powered sensors, but we are on the safer side, if the data lines are 3.3V only.
+
+| sensor | 3.3V data lines  | details |
+| ------ | ----- | ------- |
+| gy-33 | ok | Can be powered with 3.3V or 5V. Has an onboard 3.3V  regulator and the 3K9 pull-up resistors are behind the regulator |
+| vl53l0x | ok, use 3.3V power | Can be powered with 3.3V or 5V. Has an onboard 3.3V regulater, but the 10K I2C pull-up resistors are connected to the input voltage |
+| pixy2 | ok, use 3K3 pull-up resistors to 3.3V | Is 5V powered but data lines have 3.3V level |
+
 </details>
