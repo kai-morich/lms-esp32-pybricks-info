@@ -70,7 +70,7 @@ while True:
     r,g,b = rh.call('gRGB', 150, 100)
     h,s,v = pixy_color.rgb_to_hsv(r,g,b)
     c = pixy_color.hsv_to_color(h,s,v)
-    print(f'rgb : {r:3} {g:3} {b:3}    hsv : {int(h*360):3} {int(s*100):3} {v:3}    color : {c}')
+    print(f'rgb : {r:3} {g:3} {b:3}    hsv : {h:3} {s:3} {v:3}    color : {c}')
 ```
 
 ## Connections
