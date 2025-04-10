@@ -64,5 +64,16 @@ So should work with 5V powered sensors, but we are on the safer side, if the dat
 | gy-33 | ok | Can be powered with 3.3V or 5V. Has an onboard 3.3V  regulator and the 3K9 pull-up resistors are behind the regulator |
 | vl53l0x | ok, use 3.3V power | Can be powered with 3.3V or 5V. Has an onboard 3.3V regulater, but the 10K I2C pull-up resistors are connected to the input voltage |
 | pixy2 | ok, use 3K3 pull-up resistors to 3.3V | Is 5V powered but data lines have 3.3V level |
+</details>
 
+[//]: ################################
+<details><summary>wait_ms parameter at PUPRemoteHub.call function</summary>
+<dl>
+  <dt>Symptom</dt><dd>A sensor returns wrong / outdated values</dd>
+  <dt>Reason</dt><dd>The sensor took longer than the wait time</dd>
+</dl>
+  
+- If the call takes longer than the specified wait time, the previous value is returned without any notice or error. 
+- The actual time a call should not exceed is wait_ms + roughly 5msec.
+- I observed up to ~50 commands being queued and executed asynchronously
 </details>
