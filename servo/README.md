@@ -42,3 +42,25 @@ while True:
     rh.call('servo', v)
     wait(100)
 ```
+
+# Speed control
+
+To run the servo at lower speed you can use something like this in Pybricks:
+```python
+for i in range(0,360,b):
+    rh.call('servo',i)
+rh.call('servo',360)
+```
+with
+
+| value of b | speed in °/sec |
+| ---------- | -------------- |
+| 4 | ~360 |
+| 3 | ~240 |
+| 2 | ~180 |
+| 1 | ~90 |
+
+where 4 is basically full speed and the slower the speed, the more irregular the movement.
+
+
+
