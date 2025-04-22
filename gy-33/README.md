@@ -7,7 +7,7 @@ Luckily [QuirkyCort](https://github.com/QuirkyCort) created the [micropython-gy3
 from pupremote import PUPRemoteSensor
 from machine import Pin, UART
 from neopixel import NeoPixel
-from gy33_uart import GY33_UART # copy from https://github.com/kai-morich/micropython-gy33/blob/main/gy33-uart/gy33_uart.py
+from gy33_uart import GY33_UART # copy from https://github.com/QuirkyCort/micropython-gy33/blob/main/gy33-uart/gy33_uart.py
 
 np = NeoPixel(Pin(25), 1) # onboard neopixel
 np[0] = (255, 255, 0); np.write() # yellow = int
