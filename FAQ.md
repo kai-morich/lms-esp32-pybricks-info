@@ -67,6 +67,13 @@ So should work with 5V powered sensors, but we are on the safer side, if the dat
 </details>
 
 [//]: ################################
+<details><summary>More than 8 commands</summary>
+
+With standard [MicroPython firmware](https://firmware.antonsmindstorms.com/) a `call(...)` from Spike to LMS-ESP32 fails with `ENODEV` error when the command is at position 8 or higher.
+As solution copy the latest [pupremote.py](https://github.com/antonvh/PUPRemote/blob/main/src/pupremote.py) into your project to overwrite the build in variant.
+</details>
+
+[//]: ################################
 <details><summary>wait_ms parameter at PUPRemoteHub.call function</summary>
 <dl>
   <dt>Symptom</dt><dd>A sensor returns wrong / outdated values</dd>
