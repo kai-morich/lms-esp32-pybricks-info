@@ -5,7 +5,7 @@ A similar solution is possible for the *LMS-ESP32* by using the *18650 Shield V3
 
 The battery voltage is connected thru a 1MOhm voltage divider to an ADC capable pin of the *LMS-ESP32*.  
 ![schematic](https://github.com/user-attachments/assets/7cdb19a9-d499-48e7-983a-e0d9e425bdae)
-I cut some traces and soldered SMD resistors to the bottom of the shield and repurposed one of the three 5V soldering points to provide this signal.  
+I cut some traces, scraped off the solder mask and soldered SMD resistors to the bottom of the shield and repurposed one of the three 5V pin headers to provide this signal.  
 ![board](https://github.com/user-attachments/assets/324751d9-767e-483a-96d7-09469d935d9e)
 
 ## LMS-ESP32 code
