@@ -1,6 +1,6 @@
-The TCS3472 based color sensor GY-33 comes only with minimal public documentation [here](http://wiki.sunfounder.cc/index.php?title=GY-33_Color_Recognition_Sensor_Module).
+# Using the [GY-33 color sensor](http://wiki.sunfounder.cc/index.php?title=GY-33_Color_Recognition_Sensor_Module) with the [LMS-ESP32 board](https://www.antonsmindstorms.com/product/wifi-python-esp32-board-for-mindstorms/) from Antons Mindstorms and LEGO&reg; Spike running [Pybricks](https://pybricks.com/)
 
-Luckily [QuirkyCort](https://github.com/QuirkyCort) created the [micropython-gy33](https://github.com/QuirkyCort/micropython-gy33) library from some chinese documentation.
+The TCS3472 based color sensor GY-33 comes only with minimal public documentation, luckily [QuirkyCort](https://github.com/QuirkyCort) created the [micropython-gy33](https://github.com/QuirkyCort/micropython-gy33) library from some chinese documentation.
 
 ## LMS-ESP32 code:
 ```python

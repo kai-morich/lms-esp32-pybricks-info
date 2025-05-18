@@ -1,4 +1,7 @@
-Using the [Pixy2](https://pixycam.com/pixy2/) camera with [indigoparadox/boxes_and_bots](https://github.com/indigoparadox/boxes_and_bots) library.
+# Using the [Pixy2](https://pixycam.com/pixy2/) camera with the [LMS-ESP32 board](https://www.antonsmindstorms.com/product/wifi-python-esp32-board-for-mindstorms/) from Antons Mindstorms and LEGO&reg; Spike running [Pybricks](https://pybricks.com/)
+
+
+The example below uses the [indigoparadox/boxes_and_bots](https://github.com/indigoparadox/boxes_and_bots) library.
 
 ## LMS-ESP32 code:
 

@@ -1,3 +1,5 @@
+# Using a VL53L0X laser distance sensor with the [LMS-ESP32 board](https://www.antonsmindstorms.com/product/wifi-python-esp32-board-for-mindstorms/) from Antons Mindstorms and LEGO&reg; Spike running [Pybricks](https://pybricks.com/)
+
 If you only want to connect a single VL53L0X and expose it as a LEGO compatible sensor, follow [Antons article](https://www.antonsmindstorms.com/2024/05/02/lego-with-a-laser-distance-sensor/).
 
 If you want to connect multiple sensors and expose them with PUPRemote framework, start with below example that compares LEGO ultrasonic distance sensor with VL53L0X laser distance sensor.

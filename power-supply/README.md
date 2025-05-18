@@ -1,4 +1,4 @@
-# Power Supply with voltage monitoring
+# Power Supply with voltage monitoring for the [LMS-ESP32 board](https://www.antonsmindstorms.com/product/wifi-python-esp32-board-for-mindstorms/) from Antons Mindstorms
 
 Pybricks can report the Lego spike battery voltage with `hub.battery.voltage()`.  
 A similar solution is possible for the *LMS-ESP32* by using the *18650 Shield V3*.
