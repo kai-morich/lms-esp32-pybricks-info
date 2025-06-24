@@ -1,3 +1,7 @@
+> [!NOTE]
+> In colaboration with Anton, a more detailed variant of this info was created [here](https://www.antonsmindstorms.com/2025/06/17/advanced-geekservo-usage/).
+>
+
 # Using grey 3x3x5 sized _Geekservo_ 360° servos with the [LMS-ESP32 board](https://www.antonsmindstorms.com/product/wifi-python-esp32-board-for-mindstorms/) from Antons Mindstorms and LEGO&reg; Spike running [Pybricks](https://pybricks.com/)
 
 I could not find an official vendor web site for the servos, [here](https://shop.pimoroni.com/products/geekservo-building-bricks-360-degree-servo) the best data sheet I could find. There is also a smaller 2x3.5x5 sized _Geekservo_, but it is less convenient as it has an odd axle position, only turns 270° and has the axle only on one side.
