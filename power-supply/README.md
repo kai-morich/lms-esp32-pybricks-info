@@ -8,6 +8,12 @@ The battery voltage is connected thru a 1MOhm voltage divider to an ADC capable 
 I cut some traces, scraped off the solder mask and soldered SMD resistors to the bottom of the shield and repurposed one of the three 5V pin headers to provide this signal.  
 ![board](https://github.com/user-attachments/assets/818af329-7c86-45e6-8632-c3aa5984f478)
 
+## 
+> [!WARNING]
+> Don't reverse the battery!
+> 
+> The one-time fuse F1 at the lower left corner of the image was obviously blown with a nice crater. It worked as designed and prevented further damage to other devices. Replacing this 8205A dual channel MOSFET circuit fixes the problem.
+
 ## LMS-ESP32 code
 ```python
 from machine import ADC, Pin
