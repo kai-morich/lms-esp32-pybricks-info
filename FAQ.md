@@ -69,10 +69,15 @@ So should work with 5V powered sensors, but we are on the safer side, if the dat
 [//]: ################################
 <details><summary>More than 8 commands</summary>
 
-With standard [MicroPython firmware](https://firmware.antonsmindstorms.com/) a `call(...)` from Spike to LMS-ESP32 fails with `ENODEV` error when the command is at position 8 or higher.
-As solution copy the latest [pupremote.py](https://github.com/antonvh/PUPRemote/blob/main/src/pupremote.py) into your LMS-ESP32 project to overwrite the build in variant. 
+Use [MicroPython firmware](https://firmware.antonsmindstorms.com/) >= 20250617
+</details>
 
-The updated `pupremote.py` also includes name + parameter length checks in `add_command`. By copying latest [pupremote_hub.py](https://github.com/antonvh/PUPRemote/blob/main/src/pupremote_hub.py) into your Pybricks project you also get checks for consistency of method ordering + method name + max parameter length with the commands on your LMS-ESP32. Without the checks the communication typically failed with incomprehensable errors.
+[//]: ################################
+<details><summary>Time between rs.process()</summary>
+
+You must not use more than 200msec in betweeen, else the connection is reset by Spike and if 5V powered by Spike (`PUPRemoteSensor(power=True)`) the power is turned off.
+
+If you have a device that has a long initialization time and is Spike 5V powered, you have to call `rs.process()` before to turn on power and make the operation interruptable, like `pixy.init(callback=rs.process)` to keep power on.
 </details>
 
 [//]: ################################
