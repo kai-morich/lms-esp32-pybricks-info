@@ -9,7 +9,7 @@ As already mentioned in Antons article, the VL35L0X by default needs ~30msec for
 To achieve highest sensor measurement rate, use a separate _read_ thread.
 The Pybricks `rh.call('tof')` reads the latest value each ~13 msec. 
 
-If using `vl53l0x.read()` in `tof()` function instead of using a thread, the Pybricks side would have to use `rh.call('tof', wait_ms=30)` which would result in read time a roundtrip time over 40 msec.
+If using `vl53l0x.read()` in `tof()` function instead of using a thread, the Pybricks side would have to use `rh.call('tof', wait_ms=30)` which would result in a roundtrip time over 40 msec.
 
 ## LMS-ESP32 code:
 
