@@ -90,3 +90,17 @@ while True:
 
 Values look comparable and there is nearly no lagging of vl53l0x data that is processed by the LMS-ESP32 first.
 ![](comparison.png)
+
+## Misc
+
+The VL53L0X i used, behaved a bit strange.
+- It reported values ~15mm larger
+- The values for `set_measurement_timing_budget` are not as documented. With values below ~108 000 it returned `False`. I had to use:
+  | value   | timing  |
+  | ------- | ------- |
+  |       0 | 30 msec |
+  | 300 000 | 20 msec |
+  | 200 000 | 50 msec |
+I will check again with another device.
+  
+
