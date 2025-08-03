@@ -94,7 +94,7 @@ Values look comparable and there is nearly no lagging of vl53l0x data that is pr
 ## Misc
 
 The VL53L0X i used, behaved a bit strange.
-- It reported values ~15mm larger
+- It reported values ~15mm larger than real distance.
 - The values for `set_measurement_timing_budget` are not as documented. With values below ~108 000 it returned `False`. I had to use:
   | value   | timing  |
   | ------- | ------- |
