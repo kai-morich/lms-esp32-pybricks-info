@@ -81,7 +81,7 @@ If you have a device that has a long initialization time and is Spike 5V powered
 </details>
 
 [//]: ################################
-<details><summary>wait_ms parameter at PUPRemoteHub.call function</summary>
+<details><summary>wait_ms parameter at PUPRemoteHub.call()</summary>
 <dl>
   <dt>Symptom</dt><dd>A sensor returns wrong / outdated values</dd>
   <dt>Reason</dt><dd>The sensor took longer than the wait time</dd>
@@ -91,3 +91,16 @@ If you have a device that has a long initialization time and is Spike 5V powered
 - The actual time a call should not exceed is wait_ms + roughly 5msec.
 - I observed up to ~50 commands being queued and executed asynchronously
 </details>
+
+[//]: ################################
+<details><summary>Type warnings at / after PUPRemoteHub.call()</summary>
+
+VSCode shows Pylance warnings as red weavy underlines at the rh.call() line or at the next usage of the result.
+
+As `rh.call()` can return different number of values and types, the _Pylance_ based type checking does not work out of the box. With `# type: ...` you can define the type and with `# pyright: ignore[reportAssignmentType]` the assignment is silenced.  
+
+```python
+    b = rh.call('tof') # type: int # pyright: ignore[reportAssignmentType]
+    b = b + 1
+```
+
