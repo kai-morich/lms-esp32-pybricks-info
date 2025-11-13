@@ -229,6 +229,6 @@ while True:
     a = us.distance()
     #b = rh.call('tof', wait_ms=30) # variant 1.
     b = rh.call('tof') # variant 2. and 3.
-    b = b-10 # correction
+    b = b * 0.92 + 2 # correction for brown wall
     print(f'{sw.time()}; {a}; {b}')
 ```
