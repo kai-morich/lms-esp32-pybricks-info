@@ -7,6 +7,7 @@ This document explains how to expose them with the PUPRemote framework and compa
 ## Mounting
 
 Use a 3D printed case, countersunk M3 screws that fit nicely to the liftarm holes, ..., or simply zip ties:
+
 <img src="vl53l0x.jpg" width="50%">
 
 ## Latency
