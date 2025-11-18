@@ -86,7 +86,7 @@ The VL53L0X data lags approximately 20msec behind the LEGO ultrasonic sensor dat
 
 The VL53L0X has a narrower field of view. In the diagram below it is slightly smaller than the passed brick, and for the LEGO ultrasonic sensor it is slightly larger than the brick. Both look ok-ish.
 
-The Diagrams show _asynchronous channel_ driving with brisk 200 mm/sec alongside a wall and passing a 4 by 6 brick:
+The Diagrams show _asynchronous channel_ driving with brisk 200 mm/sec alongside a wall and passing a 4 by 6 brick. Every measurement looks different. The first is an example with 20msec measurement duration, the second with 30ms.
 ![](comparison-20.png)
 ![](comparison-30.png)
 
