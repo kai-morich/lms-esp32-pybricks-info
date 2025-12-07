@@ -4,6 +4,8 @@ If you only want to connect a single VL53L0X and expose it as a LEGO compatible 
 
 This document explains how to expose them with the PUPRemote framework and compares with the LEGO ultrasonic sensor.
 
+_Note_: I also tested with a VL53L4CD. It has roughly 1/3 less jitter than the VL53L0X. More tests to follow ...
+
 ## Mounting
 
 Use a 3D printed case, countersunk M3 screws that fit nicely to the liftarm holes, ..., or simply zip ties:
@@ -62,9 +64,7 @@ The limited accuracy was reproducible when attached to an Arduino.
 
 The LEGO ultrasonic sensor returns a new value each 20 msec.
 
-The VL32L0X has a configurable measurement duration, but the `set_measurement_timing_budget(budget_us)` function is not working correctly. The related Arduino function does work correctly. Probably a bug when the code was translated to Python.  
-
-The `budget_us` value is not the total measurement time in microseconds. I found these working values:
+The VL32L0X has a configurable measurement duration, but the `set_measurement_timing_budget(budget_us)` function from the https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py module used by Anton and here is not working correctly. The `budget_us` value is not the total measurement time in microseconds. I found these working values:
   | Value     | Measurement time |
   | --------- | -------- |
   | 226 000   | 20 msec |
@@ -74,6 +74,7 @@ The `budget_us` value is not the total measurement time in microseconds. I found
   | 230 000   | 320 msec |
   | 231 000   | 625 msec |
 
+When using https://github.com/antirez/vl53l0x-nb/blob/main/vl53l0x_nb.py module the `measurement_timing_budget` property works correct, but the overall behavior is comparable.
 
 ## Sensor Comparison
 
