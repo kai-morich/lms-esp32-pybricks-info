@@ -23,13 +23,20 @@ You should be aware that a `rh.call(...)` already takes ~10 msec.
 ## Thonny
 
 Start simple with [Thonny](https://thonny.org/). Thonny typically edits files directly on the device, so you have no local copy.
+To have a local copy, git integration, ... use VS Code with a MicroPython aware extension.
 
-## VS Code + Pymakr
+## VS Code + Pymakr extension
 
-To have a local copy, git integration, ... use VS Code with _Pymakr Preview_ extension. The extension is not updated since late 2022, but works most of the time.  
+The  _Pymakr Preview_ extension is not updated since late 2022, but works most of the time.  
 Sometimes gets stuck during file transfer and only solution I found so far is restarting VS code with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> 'Reload Window' command.  
 Usage is a bit obscure, after configured you basically need these 3 underlined buttons in the Explorer tree that are only shown when hovering over the line.\
 ![](docs/pymakr.png)
+
+## VS Code + MicroPython-Workbench extension
+
+Under evaluation.
+
+## VS Code Syntax Highlighting
 
 For syntax highlighting add the micropython-esp32-stubs to your `typings` folder as described [here](https://micropython-stubs.readthedocs.io/en/main/) and
 add this folder to `py_ignore` in your `pymakr.conf` file.
