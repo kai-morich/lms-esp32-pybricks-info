@@ -28,13 +28,18 @@ To have a local copy, git integration, ... use VS Code with a MicroPython aware 
 ## VS Code + Pymakr extension
 
 The  _Pymakr Preview_ extension is not updated since late 2022, but works most of the time.  
+Sometimes does not respond to commands and using <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal helps.  
 Sometimes gets stuck during file transfer and only solution I found so far is restarting VS code with <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> 'Reload Window' command.  
 Usage is a bit obscure, after configured you basically need these 3 underlined buttons in the Explorer tree that are only shown when hovering over the line.\
 ![](docs/pymakr.png)
 
+To exclude files from sync (e.g. typings folder) add to `py_ignore` list in `pymakr.conf` file.
+
 ## VS Code + MicroPython-Workbench extension
 
 Under evaluation.
+
+To exclude files from sync (e.g. typings folder) add to `.mpy-workbench/.mpyignore` file. If the folder or file does not exist, create with _Check for difference_ action.
 
 ## VS Code Syntax Highlighting
 
