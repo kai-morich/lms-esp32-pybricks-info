@@ -57,7 +57,7 @@ Neopixel and other functionality is already included in the standard MicroPython
 | ------ | ---- |
 | [PUPRemote](https://docs.antonsmindstorms.com/en/latest/Software/PUPRemote/docs/index.html) | [pupremote.py](https://github.com/antonvh/PUPRemote/blob/main/src/pupremote.py) |
 | [rcservo](https://github.com/antonvh/rcservo) | [servo.py](https://github.com/antonvh/rcservo/blob/main/servo.py) |
-| ~~mpy_robot_tools [servo](https://docs.antonsmindstorms.com/en/latest/Software/mpy-robot-tools/Docs/index.html#mpy-robot-tools-servo-module)~~ | ~~[servo.py](https://github.com/antonvh/mpy-robot-tools/blob/master/mpy_robot_tools/servo.py](https://github.com/antonvh/mpy-robot-tools/blob/1d9d5354e4c8b4bf01d9a75072e47c5b9629cdff/mpy_robot_tools/servo.py)~~ |
+| ~~mpy_robot_tools [servo](https://docs.antonsmindstorms.com/en/latest/Software/mpy-robot-tools/Docs/index.html#mpy-robot-tools-servo-module)~~ | ~~[servo.py](https://github.com/antonvh/mpy-robot-tools/blob/1d9d5354e4c8b4bf01d9a75072e47c5b9629cdff/mpy_robot_tools/servo.py)~~ |
 | mpy_robot_tools ... | ... |
 </details>
 
