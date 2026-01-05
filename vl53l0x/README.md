@@ -4,8 +4,6 @@ If you only want to connect a single VL53L0X and expose it as a LEGO compatible 
 
 This document explains how to expose them with the PUPRemote framework and compares with the LEGO ultrasonic sensor.
 
-_Note_: I also tested with a VL53L4CD. It has roughly 1/3 less jitter than the VL53L0X. More tests to follow ...
-
 ## Mounting
 
 Use a 3D printed case, countersunk M3 screws that fit nicely to the liftarm holes, ..., or simply zip ties:
@@ -14,25 +12,29 @@ Use a 3D printed case, countersunk M3 screws that fit nicely to the liftarm hole
 
 ## Latency
 
-A LEGO ultrasonic sensor is directly attached to the LEGO Spike, but for the TOF sensor the data goes over one aditional hop (the LMS-ESP32) so it has a higher latency. By using one of the asynchronous variants, this can be minimized.
+A LEGO ultrasonic sensor is directly attached to the LEGO Spike, but for the TOF sensor the data goes over one aditional hop (the LMS-ESP32) so it has a higher latency. By using one of the non-blocking variants, this can be minimized.
 
-### Variant 1: Synchronous `command`
+### Variant 1: Blocking `command`
 
-Simplest code, but worst sample rate and high latency. See code at the end.
+Simplest code, but worst sample rate and high latency.
+
+The call blocks until the measurement is ready. See code at the end.
 
 As already mentioned in Anton's article, the VL35L0X by default needs approximately 30 milliseconds for a measurement, so you have to use `rh.call('tof', wait_ms=30)`, resulting in a round trip time of over 40 milliseconds.
 
-### Variant 2: Asynchronous `command`
+### Variant 2: Non-Blocking `command`
 
 Best sample rate, medium latency.
 
-Values are calculated in a background thread and `rh.call('tof')` returns the latest value roughly each 13 milliseconds.
+Values are calculated in the background and `rh.call('tof')` returns the latest value roughly each 13 milliseconds.
 
-### Variant 3: Asynchronous `channel`
+### Variant 3: Non-Blocking `channel`
 
-Best sample rate, shortest latency - but only if no other commands or channels are called interleaved with the _tof_.
+Best sample rate, shortest latency. 
 
-Values are calculated in a background thread and send to the Spike when a new value is available. The `rh.call('tof')` returns in less than a millisecond with the latest received value. As polling from LEGO Spike is omitted, the values are available approximately 5-6 milliseconds earlier than variant 2.
+After the first call, channels are always non-blocking, unless you interleave with other command or other channel calls.
+
+Values are calculated in the background and send to the Spike when a new value is available. The `rh.call('tof')` returns in less than a millisecond with the latest received value. As polling from LEGO Spike is omitted, the values are available approximately 5-6 milliseconds earlier than variant 2.
 
 Requires >= MicroPython v1.25.0 firmware.
 
@@ -87,7 +89,7 @@ The VL53L0X data lags approximately 20msec behind the LEGO ultrasonic sensor dat
 
 The VL53L0X has a narrower field of view. In the diagram below it is slightly smaller than the passed brick, and for the LEGO ultrasonic sensor it is slightly larger than the brick. Both look ok-ish.
 
-The Diagrams show _asynchronous channel_ driving with brisk 200 mm/sec alongside a wall and passing a 4 by 6 brick. Every measurement looks different. The first is an example with 20msec measurement duration, the second with 30ms.
+The Diagrams show _non-blocking channel_ driving with brisk 200 mm/sec alongside a wall and passing a 4 by 6 brick. Every measurement looks different. The first is an example with 20msec measurement duration, the second with 30ms.
 ![](comparison-20.png)
 ![](comparison-30.png)
 
@@ -98,7 +100,7 @@ The Diagrams show _asynchronous channel_ driving with brisk 200 mm/sec alongside
 
 Add a file named `VL53L0X.py` with content from https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py
 
-#### 1. Synchronous command
+#### 1. Blocking command
 
 ```python
 from machine import SoftI2C, Pin
@@ -117,7 +119,7 @@ while True:
     rs.process()
 ```
 
-#### 2. Asynchronous command
+#### 2. Non-Blocking command
 
 ```python
 from machine import SoftI2C, Pin
@@ -167,7 +169,10 @@ rs.add_command('tofOn', '', 'B')
 while True:
     rs.process()
 ```
-#### 3. Asynchronous channel
+#### 3. Non-blocking channel
+
+Sub-Variant with separate thread:
+
 ```python
 from machine import SoftI2C, Pin
 from pupremote import PUPRemoteSensor
@@ -208,6 +213,32 @@ rs.add_command('tofOn', '', 'B')
 while True:
     rs.process()
 ```
+
+Simpler sub-variant with less responsive main loop:
+
+```python
+from machine import SoftI2C, Pin
+from pupremote import PUPRemoteSensor
+from VL53L0X import VL53L0X # https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py
+
+vl53l0x = VL53L0X(SoftI2C(scl=Pin(4), sda=Pin(5), freq=200000))
+vl53l0xOn = False
+
+def tofOn(on):
+    global vl53l0xOn
+    vl53l0xOn = on
+
+rs = PUPRemoteSensor(power=True)
+rs.add_channel('tof', 'H')
+rs.add_command('tofOn', '', 'B')
+
+while True:
+    rs.process()
+    if vl53l0xOn:
+        rs.update_channel('tof', vl53l0x.read())
+```
+
+The first sub-variant is only needed if you want to do time sensitive operations concurrently.
 
 ### Pybricks code:
 
