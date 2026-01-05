@@ -232,13 +232,14 @@ rs = PUPRemoteSensor(power=True)
 rs.add_channel('tof', 'H')
 rs.add_command('tofOn', '', 'B')
 
+vl53l0x.start()
 while True:
     rs.process()
     if vl53l0xOn:
         rs.update_channel('tof', vl53l0x.read())
 ```
+With `vl53l0x.start()` the library measures in continuous mode, so the sample rate of both variants is identical. If the `vl53l0x.read()` command would start a new measurement, the sample rate would be 1-2msec lower as `rs.process()` waits some time for requests.
 
-The first sub-variant is only needed if you want to do time sensitive operations concurrently.
 
 ### Pybricks code:
 
