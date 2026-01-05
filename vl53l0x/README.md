@@ -39,6 +39,13 @@ Values are calculated in the background and send to the Spike when a new value i
 Requires >= MicroPython v1.25.0 firmware.
 
 
+## Measurement Duration
+
+The LEGO ultrasonic sensor returns a new value each 20 msec.
+
+The VL32L0X has a configurable measurement duration, with 30 msec default and 20 msec minimum.
+
+
 ## Accuracy
 
 The VL53L0X has limited accuracy and a high jitter. Check [here](https://forum.pololu.com/t/vl53l0x-not-very-accurate-at-all/) and [here](https://www.fpaynter.com/2022/03/new-wall-following-capability-for-wall-e3/) for discussion and correction strategies. 
@@ -62,11 +69,12 @@ The LEGO ultrasonic sensor has basically no jitter. Depending on the measurement
 
 The limited accuracy was reproducible when attached to an Arduino.
 
-## Measurement Duration
 
-The LEGO ultrasonic sensor returns a new value each 20 msec.
+## Libraries
 
-The VL32L0X has a configurable measurement duration, but the `set_measurement_timing_budget(budget_us)` function from the https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py module used by Anton and here is not working correctly. The `budget_us` value is not the total measurement time in microseconds. I found these working values:
+I started with the https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py module, which is identical to [uceeatz/VL53L0X](https://github.com/uceeatz/VL53L0X/blob/master/VL53L0X.py) with replaced  `Timer` module.
+
+the `set_measurement_timing_budget(budget_us)` function is not working correctly. The `budget_us` value is not the total measurement time in microseconds. I found these working values:
   | Value     | Measurement time |
   | --------- | -------- |
   | 226 000   | 20 msec |
@@ -76,14 +84,16 @@ The VL32L0X has a configurable measurement duration, but the `set_measurement_ti
   | 230 000   | 320 msec |
   | 231 000   | 625 msec |
 
-When using https://github.com/antirez/vl53l0x-nb/blob/main/vl53l0x_nb.py module the `measurement_timing_budget` property works correct, but the overall behavior is comparable.
+The [antirez/vl53l0x-nb](https://github.com/antirez/vl53l0x-nb/blob/main/vl53l0x_nb.py) module has a correctly working `measurement_timing_budget` property.
+
+Both libraries report slightly different distances. Unclear which is better.
+
 
 ## Sensor Comparison
 
-Due to the high jitter I can not recommend the VL32L0X. The jitter would be ok-ish for measurement durations > 200 msec, but that is not acceptable for a moving robot. 
+Unclear if the jitter is a real issue. To be verified with a PID based wall follower.
 
 Correcting the values with a linear function is possible but not perfect as the errors also look non-linear.
-
 
 The VL53L0X data lags approximately 20msec behind the LEGO ultrasonic sensor data. Should be sufficient.
 
