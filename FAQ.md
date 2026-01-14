@@ -13,6 +13,8 @@ Duration for a loop executing 1000 x [rgb_to_hsv](https://github.com/kai-morich/
 
 It's slower by orders of magnitude!
 
+Avoid f-strings in timing sensitive loops, e.g  `print(f'x {a} {b} {c}')` takes 1.3 msec and `print('x',a,b,c)` takes 0.4 msec.
+
 You should be aware that a `rh.call(...)` already takes ~10 msec.
 </details>
 
@@ -67,6 +69,9 @@ Neopixel and other functionality is already included in the standard MicroPython
 Some pins of the ESP32 have special behaviour during boot time, these are called _strapping pins_.
   
 Pins 0,2,12,15 at the [IO header](https://www.antonsmindstorms.com/docs/lms-esp32-v2-pinout/) should be avoided unless you really know how to handle them.
+
+Pins 0,2,15 are ok for usage like I2C having pull-up resistors, but pin 12 must not be pulled up during boot.
+
 </details>
 
 [//]: ################################
@@ -112,6 +117,8 @@ If you have a device that has a long initialization time and is Spike 5V powered
 
 [//]: ################################
 <details><summary>Type warnings at / after PUPRemoteHub.call()</summary>
+
+Use firmware > 20251228 or type hint comments:
 
 VSCode shows Pylance warnings as red weavy underlines at the rh.call() line or at the next usage of the result.
 
