@@ -21,11 +21,11 @@ Then the lag to the Lego sensor was measured at 200 mm/sec:
 ![](apds9960-lag@200.png)
 ![](gy33-lag@200.png)
 
-## Value comparison
+## Data comparison
 
 Test cases:
-1. Printed grey bars: white, 20% black, 40%, 60%, 80%, 100% black, white
-1. Printed color bars: white, 0°=360°, 300°, 240°, 180°, 120°, 60°, 0°=360° hue:
+1. Printed grey gradient: white to black
+1. Printed color bars: white, 0°=360° (red), 300°, 240° (blue), 180°, 120° (green), 60° (yellow), 0°=360° (red):
 1. Lego brick color: white, red, blue, light-blue, green, light-green, yellow, red:
 
 ### H'ue
@@ -46,11 +46,6 @@ Test cases:
 White paper at different distance from ground: 1 beam, +16mm, +32mm
 ![](distance-v.png)
 
-### C'larity
-
-1. ![](print-grey-c.png)
-1. ![](print-color-c.png)
-1. ![](brick-color-c.png)
 
 ## Color processing
 
@@ -58,18 +53,18 @@ Preprocessing to HSV color space is best done on the LMS-ESP32 as it is twice as
 
 __White balance:__ The B'lue value is significantly lower than the others. Very likely caused by the non homogenous onboard LED. Adjust before all else.
 
-__C'larity to V'alue__: Looks like the Lego sensor limits the internal C'larity value to some max value and reports as V'alue 100. Likely uses a logarithmic function as linear scaling did not provide good results. By experiment I created sensor specific functions that at least get close to the Lego sensor values. 
+__C'larity to V'alue__: The C'larity value from range 0..2100 or 0..1400 has to be converted to 0..100. Probably the Lego sensor does the same internally. With a function using two different slopes with transition at 80 I could get very close.
 
 Has to be adapted per sensor, surface material and target colors, e.g.:
 ```python
 def tcs34725_rgbc_to_hsv(r, g, b, c):
-    g *= 1.025 # white balance
-    b *= 1.65
+    c +=         g*0.025 + b*0.65 # white balance
+    r, g, b = r, g*1.025,  b*1.65
     h, s, _ = rgb_to_hsv(r, g, b)
-    if c <= 0:    v = 0
-    elif c < 600: v = c * 0.125
-    else:         v = 25 * math.log(c / 600) + 600 * 0.125
-    return int(h*360), int(s*100), min(100, int(v))
+    if c < 1250:   v = c * 80/1250
+    elif c < 1900: v = (c-1250)/(1900-1250)*20 + 80
+    else:          v = 100
+    return int(h*360), int(s*100), int(v)
 ```
 Copy `rgb_to_hsv` function from https://github.com/python/cpython/blob/main/Lib/colorsys.py.
 
@@ -104,13 +99,13 @@ cs.integration_time = 12
 cs.active = True
 
 def tcs34725_rgbc_to_hsv(r, g, b, c):
-    g *= 1.025 # white balance
-    b *= 1.65
+    c +=         g*0.025 + b*0.65 # white balance
+    r, g, b = r, g*1.025,  b*1.65
     h, s, _ = rgb_to_hsv(r, g, b)
-    if c <= 0:    v = 0
-    elif c < 600: v = c * 0.125
-    else:         v = 25 * math.log(c / 600) + 600 * 0.125
-    return int(h*360), int(s*100), min(100, int(v))
+    if c < 1250:   v = c * 80/1250
+    elif c < 1900: v = (c-1250)/(1900-1250)*20 + 80
+    else:          v = 100
+    return int(h*360), int(s*100), int(v)
 
 rs = PUPRemoteSensor(power=True)
 rs.add_channel('cs','HBB')
@@ -145,13 +140,13 @@ cs.setLightIntegrationTime(15) # x*2.78ms = 13.9ms
 cs.setAmbientLightGain(apds9960.const.APDS9960_AGAIN_4X)
 
 def apds9960_rgbc_to_hsv(r, g, b, c):
-    g *= 1.25 # white balance
-    b *= 1.40
+    c +=          g*0.25 + b*0.40 # white balance
+    r, g, b, = r, g*1.25,  b*1.40
     h, s, _ = rgb_to_hsv(r, g, b)
-    if c <= 0:    v = 0
-    if c < 500:   v = c * 0.17
-    else:         v = 20 * math.log(c / 500) + 500 * 0.17
-    return int(h*360), int(s*100), min(100, int(v))
+    if c < 750:    v = c * 80/750
+    elif c < 1300: v = (c-750)/(1300-750)*20 + 80
+    else:          v = 100
+    return int(h*360), int(s*100), int(v)
 
 rs = PUPRemoteSensor(power=True)
 rs.add_channel('cs','HBB')
