@@ -186,7 +186,7 @@ if not cs.update(wait=1000): # connection check
     raise RuntimeError('gy33 not responding')
 
 def gy33_rgbc_to_hsv(r, g, b, c):
-    return tcs34725_rgbc_to_hsv(r, g, b, c)
+    # todo: reuse tcs34725 code, but max value is lower, white balance is different, ...
 
 rs = PUPRemoteSensor(power=True)
 rs.add_channel('cs','HBB')
