@@ -87,7 +87,7 @@ def hsv_to_color(h, s, v):
 
 I tested a 3x3 stud sized module and a 4x1.5 sized module. Both come with onboard LED.
 
-I used the [adafruit/Adafruit_TCS34725](https://github.com/adafruit/Adafruit_TCS34725) library with `adafruit_bus_device/i2c_device.py` from [AHSPC/adafruit_i2c_device_micropython](https://github.com/AHSPC/adafruit_i2c_device_micropython/blob/main/i2c_device.py) 
+I used the [adafruit/Adafruit_CircuitPython_TCS34725](https://github.com/adafruit/Adafruit_CircuitPython_TCS34725) library with `adafruit_bus_device/i2c_device.py` from [AHSPC/adafruit_i2c_device_micropython](https://github.com/AHSPC/adafruit_i2c_device_micropython/blob/main/i2c_device.py) 
 
 ```python
 import ...
