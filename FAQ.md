@@ -96,26 +96,6 @@ Use [MicroPython firmware](https://firmware.antonsmindstorms.com/) >= 20250617
 </details>
 
 [//]: ################################
-<details><summary>Time between rs.process()</summary>
-
-You must not use more than 200msec for your command processing, else the connection is reset by Spike and if 5V powered by Spike (`PUPRemoteSensor(power=True)`) the power is turned off.
-
-If you have a device that has a long initialization time and is Spike 5V powered, you have to call `rs.process()` before to turn on power and make the operation interruptable, like `pixy.init(callback=rs.process)` to keep power on.
-</details>
-
-[//]: ################################
-<details><summary>wait_ms parameter at PUPRemoteHub.call()</summary>
-<dl>
-  <dt>Symptom</dt><dd>A sensor returns wrong / outdated values</dd>
-  <dt>Reason</dt><dd>The sensor took longer than the wait time</dd>
-</dl>
-  
-- If the call takes longer than the specified wait time, the previous value is returned without any notice or error. 
-- The actual time a call should not exceed is wait_ms + roughly 5msec.
-- I observed up to ~50 commands being queued and executed asynchronously
-</details>
-
-[//]: ################################
 <details><summary>Type warnings at / after PUPRemoteHub.call()</summary>
 
 Use firmware > 20251228 or type hint comments:

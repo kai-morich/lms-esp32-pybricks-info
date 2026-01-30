@@ -12,29 +12,24 @@ Use a 3D printed case, countersunk M3 screws that fit nicely to the liftarm hole
 
 ## Latency
 
-A LEGO ultrasonic sensor is directly attached to the LEGO Spike, but for the TOF sensor the data goes over one aditional hop (the LMS-ESP32) so it has a higher latency. By using one of the non-blocking variants, this can be minimized.
+A LEGO ultrasonic sensor is directly attached to the LEGO Spike, but for the TOF sensor the data goes over one aditional hop (the LMS-ESP32) so it has a higher latency. By using channel instead of command, this can be minimized.
 
-### Variant 1: Blocking `command`
+### `command` Variant
 
-Simplest code, but worst sample rate and high latency.
+Simple code, but low sample rate and high latency.
 
 The call blocks until the measurement is ready. See code at the end.
 
 As already mentioned in Anton's article, the VL35L0X by default needs approximately 30 milliseconds for a measurement, so you have to use `rh.call('tof', wait_ms=30)`, resulting in a round trip time of over 40 milliseconds.
 
-### Variant 2: Non-Blocking `command`
 
-Best sample rate, medium latency.
+###  `channel` Variant
 
-Values are calculated in the background and `rh.call('tof')` returns the latest value roughly each 13 milliseconds.
-
-### Variant 3: Non-Blocking `channel`
-
-Best sample rate, shortest latency. 
+Best sample rate, lowest latency. 
 
 After the first call, channels are always non-blocking, unless you interleave with other command or other channel calls.
 
-Values are calculated in the background and send to the Spike when a new value is available. The `rh.call('tof')` returns in less than a millisecond with the latest received value. As polling from LEGO Spike is omitted, the values are available approximately 5-6 milliseconds earlier than variant 2.
+Values are calculated in the background and send to the Spike when a new value is available. The `rh.call('tof')` returns in less than a millisecond with the latest received value. 
 
 Requires >= MicroPython v1.25.0 firmware.
 
@@ -99,7 +94,7 @@ The VL53L0X data lags approximately 20msec behind the LEGO ultrasonic sensor dat
 
 The VL53L0X has a narrower field of view. In the diagram below it is slightly smaller than the passed brick, and for the LEGO ultrasonic sensor it is slightly larger than the brick. Both look ok-ish.
 
-The Diagrams show _non-blocking channel_ driving with brisk 200 mm/sec alongside a wall and passing a 4 by 6 brick. Every measurement looks different. The first is an example with 20msec measurement duration, the second with 30ms.
+The Diagrams shows the _channel_ variant, driving with brisk 200 mm/sec alongside a wall and passing a 4 by 6 brick. Every measurement looks different. The first is an example with 20msec measurement duration, the second with 30ms.
 ![](comparison-20.png)
 ![](comparison-30.png)
 
@@ -110,7 +105,7 @@ The Diagrams show _non-blocking channel_ driving with brisk 200 mm/sec alongside
 
 Add a file named `VL53L0X.py` with content from https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py
 
-#### 1. Blocking command
+#### Command variant
 
 ```python
 from machine import SoftI2C, Pin
@@ -129,102 +124,7 @@ while True:
     rs.process()
 ```
 
-#### 2. Non-Blocking command
-
-```python
-from machine import SoftI2C, Pin
-from pupremote import PUPRemoteSensor
-from VL53L0X import VL53L0X # https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py
-import _thread
-
-class VL53L0XThread:
-    def __init__(self, device: VL53L0X):
-        self.device = device
-        self.enabled = False
-        self.value = 0
-
-    def _run(self):
-        self.device.start()
-        while self.enabled:
-            self.value = self.device.read()
-        self.device.stop()
-        self.value = 0
-
-    def start(self):
-        self.enabled = True
-        _thread.start_new_thread(self._run, ())
-
-    def stop(self):
-        self.enabled = False
-
-    def get(self):
-        return self.value
-
-vl53l0x = VL53L0X(SoftI2C(scl=Pin(4), sda=Pin(5), freq=200000))
-vl53l0xThread = VL53L0XThread(vl53l0x)
-
-def tof(): 
-    return vl53l0xThread.get()
-
-def tofOn(on):
-    if on:
-        vl53l0xThread.start()
-    else:
-        vl53l0xThread.stop()
-  
-rs = PUPRemoteSensor(power=True)
-rs.add_command('tof', 'H', '')
-rs.add_command('tofOn', '', 'B')
-
-while True:
-    rs.process()
-```
-#### 3. Non-blocking channel
-
-Sub-Variant with separate thread:
-
-```python
-from machine import SoftI2C, Pin
-from pupremote import PUPRemoteSensor
-from VL53L0X import VL53L0X # https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py
-import _thread
-
-class VL53L0XThread:
-    def __init__(self, device: VL53L0X):
-        self.device = device
-        self.enabled = False
-
-    def _run(self):
-        self.device.start()
-        while self.enabled:
-            rs.update_channel('tof', self.device.read())
-        self.device.stop()
-
-    def start(self):
-        self.enabled = True
-        _thread.start_new_thread(self._run, ())
-
-    def stop(self):
-        self.enabled = False
-
-vl53l0x = VL53L0X(SoftI2C(scl=Pin(4), sda=Pin(5), freq=200000))
-vl53l0xThread = VL53L0XThread(vl53l0x)
-
-def tofOn(on):
-    if on:
-        vl53l0xThread.start()
-    else:
-        vl53l0xThread.stop()
-
-rs = PUPRemoteSensor(power=True)
-rs.add_channel('tof', 'H')
-rs.add_command('tofOn', '', 'B')
-
-while True:
-    rs.process()
-```
-
-Simpler sub-variant with less responsive main loop:
+#### Channel variant
 
 ```python
 from machine import SoftI2C, Pin
@@ -248,7 +148,9 @@ while True:
     if vl53l0xOn:
         rs.update_channel('tof', vl53l0x.read())
 ```
-With `vl53l0x.start()` the library measures in continuous mode, so the sample rate of both variants is identical. If the `vl53l0x.read()` command would start a new measurement, the sample rate would be 1-2msec lower as `rs.process()` waits some time for requests.
+With `vl53l0x.start()` the library measures in continuous mode. Else the `vl53l0x.read()` command would start a new measurement and the sample rate would be 1-2msec lower as `rs.process()` waits some time for requests.
+
+Using the other library will not block the main loop. This is prefered if your LMS-ESP32 also has to handle other sensors or actors.
 
 
 ### Pybricks code:
@@ -262,16 +164,16 @@ from pupremote_hub import PUPRemoteHub # https://github.com/antonvh/PUPRemote/bl
 sw = StopWatch()
 us = UltrasonicSensor(Port.B)
 rh = PUPRemoteHub(Port.A)
-#rh.add_command('tof', 'H', '') # variant 1. and 2.
-rh.add_channel('tof', 'H') # variant 3.
-rh.add_command('tofOn', '', 'B') # variant 2. and 3.
+#rh.add_command('tof', 'H', '')     # command variant
+rh.add_channel('tof', 'H')          # channel variant
+rh.add_command('tofOn', '', 'B')    # channel variant
 
 print('time; lego; tof')
-rh.call('tofOn', 1) # variant 2. and 3.
+rh.call('tofOn', 1)                 # channel variant
 while True:
     a = us.distance()
-    #b = rh.call('tof', wait_ms=30) # variant 1.
-    b = rh.call('tof') # variant 2. and 3.
+    #b = rh.call('tof', wait_ms=30) # command variant
+    b = rh.call('tof')              # channel variant
     b = b * 0.92 + 2 # correction for brown wall
     print(f'{sw.time()}; {a}; {b}')
 ```
