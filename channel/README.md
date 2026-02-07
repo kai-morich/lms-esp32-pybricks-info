@@ -73,7 +73,7 @@ while True:
         rs.update_channel('my_get', value)
 ```
 
-The first `call` to a channel activates it. While active the LMS-ESP32 sends new data with `update_channel` and subsequent `call` immediately return the latest available data in less than 1 msec. Calling a different command or channel deactivates it. If not active, the value is only stored on LMS-ESP32 side, but not send.
+The first `call` to a channel calls the LMS-ESP32, returns data from the latest `update_channel` and activates the channel. While active the LMS-ESP32 sends new data proactively with `update_channel`. Subsequent `call` immediately return the latest available data in less than 1 msec without calling the LMS-ESP32. Calling a different command or channel deactivates it. If not active, the value is only stored on LMS-ESP32 side, but not send.
 
 As data is send proactively by the LMS-ESP32, it is available on Spike side significantly earlier. With commands it is available 12 msec + measurement duration after call begin. For a VL53L0X this was 5msec vs. 40msec latency.
 
