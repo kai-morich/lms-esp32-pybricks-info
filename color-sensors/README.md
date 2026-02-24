@@ -51,18 +51,18 @@ White paper at different distance from ground: 1 beam, +16mm, +32mm
 
 Preprocessing to HSV color space is best done on the LMS-ESP32 as it is twice as fast as the Lego Spike and only 4 instead of 8 bytes have to be transferred.
 
-__White balance:__ The B'lue value is significantly lower than the others. Very likely caused by the non homogenous onboard LED. Adjust before all else.
+__White balance:__ Highly depends on the onboard LED. Adjust before all else.
 
-__C'larity to V'alue__: The C'larity value from range 0..2100 or 0..1400 has to be converted to 0..100. Probably the Lego sensor does the same internally. With a function using two different slopes with transition at 80 I could get very close.
+__C'larity to V'alue__: Highly depends on the onboard LED. I observed value in range 0..1500 and range 0..2100, which has to be converted to 0..100. Probably the Lego sensor does the same internally. With a function using two different slopes with transition at 80% I could get very close.
 
 Has to be adapted per sensor, surface material and target colors, e.g.:
 ```python
 def tcs34725_rgbc_to_hsv(r, g, b, c):
-    c +=         g*0.025 + b*0.65 # white balance
-    r, g, b = r, g*1.025,  b*1.65
+    r, g, b = r*1.52, g,  b*1.27 # white balance
     h, s, _ = rgb_to_hsv(r, g, b)
-    if c < 1250:   v = c * 80/1250
-    elif c < 1900: v = (c-1250)/(1900-1250)*20 + 80
+    c80, c100 = 500, 1000 # 80% at 500, 100% at 1000
+    if   c < c80:  v = c * 80/c80
+    elif c < c100: v = (c-c80)/(c100-c80)*20 + 80
     else:          v = 100
     return int(h*360), int(s*100), int(v)
 ```
@@ -83,6 +83,9 @@ def hsv_to_color(h, s, v):
         else:                 return Color.BLUE        
 ```
 
+Be careful when mixing devices from different sources!  
+I had significantly different C'larity and white balance due to different onboardLEDs. After replacing with identical LEDs was better but not perfect.
+
 ## TCS34725
 
 I tested a 3x3 stud sized module and a 4x1.5 sized module. Both come with onboard LED.
@@ -99,13 +102,14 @@ cs.integration_time = 12
 cs.active = True
 
 def tcs34725_rgbc_to_hsv(r, g, b, c):
-    c +=         g*0.025 + b*0.65 # white balance
-    r, g, b = r, g*1.025,  b*1.65
+    r, g, b = r*1.52, g,  b*1.27 # white balance
     h, s, _ = rgb_to_hsv(r, g, b)
-    if c < 1250:   v = c * 80/1250
-    elif c < 1900: v = (c-1250)/(1900-1250)*20 + 80
+    c80, c100 = 500, 1000 # 80% at 500, 100% at 1000
+    if   c < c80:  v = c * 80/c80
+    elif c < c100: v = (c-c80)/(c100-c80)*20 + 80
     else:          v = 100
     return int(h*360), int(s*100), int(v)
+
 
 rs = PUPRemoteSensor(power=True)
 rs.add_channel('cs','HBB')
@@ -140,11 +144,11 @@ cs.setLightIntegrationTime(15) # x*2.78ms = 13.9ms
 cs.setAmbientLightGain(apds9960.const.APDS9960_AGAIN_4X)
 
 def apds9960_rgbc_to_hsv(r, g, b, c):
-    c +=          g*0.25 + b*0.40 # white balance
-    r, g, b, = r, g*1.25,  b*1.40
+    r, g, b, = r, g*1.25,  b*1.40 # white balance
     h, s, _ = rgb_to_hsv(r, g, b)
-    if c < 750:    v = c * 80/750
-    elif c < 1300: v = (c-750)/(1300-750)*20 + 80
+    c80, c100 = 750, 1300 # 80% at 500, 100% at 1300
+    if   c < c80:  v = c * 80/c80
+    elif c < c100: v = (c-c80)/(c100-c80)*20 + 80
     else:          v = 100
     return int(h*360), int(s*100), int(v)
 
@@ -186,7 +190,7 @@ if not cs.update(wait=1000): # connection check
     raise RuntimeError('gy33 not responding')
 
 def gy33_rgbc_to_hsv(r, g, b, c):
-    # todo: reuse tcs34725 code, but max value is lower, white balance is different, ...
+    # todo: reuse tcs34725 code, but max clarity  is lower, white balance is different, ...
 
 rs = PUPRemoteSensor(power=True)
 rs.add_channel('cs','HBB')
