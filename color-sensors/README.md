@@ -98,7 +98,7 @@ from adafruit_tcs34725 import TCS34725
 
 cs = TCS34725(SoftI2C(scl=Pin(4), sda=Pin(5), freq=100000))
 cs.gain = 4
-cs.integration_time = 12
+cs.integration_time = 4.8 # total time is 2.4 msec longer
 cs.active = True
 
 def tcs34725_rgbc_to_hsv(r, g, b, c):
