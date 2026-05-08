@@ -20,6 +20,7 @@ Then the lag to the Lego sensor was measured at 200 mm/sec:
 ![](tcs34725-lag@200.png)
 ![](apds9960-lag@200.png)
 ![](gy33-lag@200.png)
+Note: TCS34725 measurement was done with non-optimized Adafruit library
 
 ## Data comparison
 
