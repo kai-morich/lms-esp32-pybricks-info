@@ -4,12 +4,12 @@ Sensors used with the [LMS-ESP32 board](https://www.antonsmindstorms.com/product
 
 ## Devices
 
-| Name:      | Quality: | Lag:    | Measurement Time: |
-| ---------- | -------- | ------- | ----------------- |
-| Lego 45605 | ++       | 0       | 9-10 msec         |
-| TCS34725   | +        | 15 msec | 2.4 msec steps    |
-| APDS9960   | (+)      | 10 msec | 2.78 msec steps   |
-| GY-33      | -        | 75 msec | 2.4, 24, 100 msec |
+| Name:      | Quality: | Lag:       | Measurement Time: |
+| ---------- | -------- | ---------- | ----------------- |
+| Lego 45605 | ++       | 0          | 9-10 msec         |
+| TCS34725   | +        | 10-15 msec | 2.4 msec steps    |
+| APDS9960   | (+)      | 10 msec    | 2.78 msec steps   |
+| GY-33      | -        | 75 msec    | 2.4, 24, 100 msec |
 
 ![](test-rig.jpg)
 
@@ -90,7 +90,7 @@ I had significantly different C'larity and white balance due to different onboar
 
 I tested a 3x3 stud sized module and a 4x1.5 sized module. Both come with onboard LED.
 
-I used the [adafruit/Adafruit_CircuitPython_TCS34725](https://github.com/adafruit/Adafruit_CircuitPython_TCS34725) library with `adafruit_bus_device/i2c_device.py` from [AHSPC/adafruit_i2c_device_micropython](https://github.com/AHSPC/adafruit_i2c_device_micropython/blob/main/i2c_device.py) 
+I used a performance improved variant of [adafruit/Adafruit_CircuitPython_TCS34725](https://github.com/kai-morich/Adafruit_CircuitPython_TCS34725) library with `adafruit_bus_device/i2c_device.py` from [AHSPC/adafruit_i2c_device_micropython](https://github.com/AHSPC/adafruit_i2c_device_micropython/blob/main/i2c_device.py) 
 
 ```python
 import ...
