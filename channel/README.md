@@ -44,6 +44,35 @@ The `call` function has a `wait_ms` parameter with default value 0. The effectiv
 
 For longer running commands you have to provide an appropriate wait time, e.g. `rh.call('tof', wait_ms=30)` when using [`vl53l0x.read()`](https://github.com/antonvh/PUPRemote/blob/main/examples/emulate_dist_sensor/VL53L0X.py) in your command. Don't be to generous with the wait time as `call` will always wait for the full specified time.
 
+### Sequence Diagram
+```mermaid
+sequenceDiagram
+    box Spike    
+        participant Spike-User as User Program
+        participant Spike-RH as PUPRemoteHub
+        participant Spike-BG as Receive Loop
+    end
+    box LMS-ESP32
+        participant LMS-main as Main Loop
+        participant LMS-RS as PUPRemoteSensors
+        Participant LMS-User as User function
+    end
+    Spike-User ->>+ Spike-RH: rh.call('cmd1',<br>parameter, wait)
+
+    activate LMS-main
+    LMS-main ->>+ LMS-RS: rs.process()
+    Spike-RH ->> LMS-RS: Send 'cmd1' parameter
+    LMS-RS ->>+ LMS-User: Invoke<br>cmd1(parameter)
+    Spike-RH ->> Spike-RH: wait
+    LMS-User -->>- LMS-RS:
+    LMS-RS ->> Spike-BG: Send 'cmd1' return value
+    LMS-RS -->>- LMS-main: 
+    deactivate LMS-main
+    Spike-RH ->>+ Spike-BG: Fetch return value
+    Spike-BG -->>- Spike-RH:
+    Spike-RH -->>- Spike-User: 
+```
+
 ## Channel
 
 Using `command` is ok for setting values to servo, LED, ... and getting values from sensors occasionaly, but if you want to repeatedly read sensors in a fast interval with low latency you should use `channel` instead, e.g. for using a [color sensor](../color-sensors/README.md) as line follower or [distance sensor](../distance-sensors/README.md) as wall follower.
@@ -79,8 +108,80 @@ As data is send proactively by the LMS-ESP32, it is available on Spike side sign
 
 Keep the run time of your code in the main loop short, to keep the LMS-ESP32 responsive. E.g. do not perform a blocking ToF measurement for 30msec or more in the main loop. Instead the device should run in continues mode, either start before as drafted in `my_set` or a new measurement should be triggered after `update_channel`.
 
-The Lego color sensor provides new data each 9-10 msec. You should not update the channel faster, as this will make the Spike unresponsive.
+The Lego color sensor provides new data each 9-10 msec. You should not update the channel significantly faster, as this will make the Spike unresponsive.
 
+### Sequence Diagram
+```mermaid
+sequenceDiagram
+    box Spike    
+        participant Spike-User as User Program
+        participant Spike-RH as PUPRemoteHub
+        participant Spike-BG as Receive Loop
+    end
+    box LMS-ESP32
+        participant LMS-main as Main Loop
+        participant LMS-RS as PUPRemoteSensors
+        Participant LMS-User as User function
+    end
+   
+    activate LMS-main
+    LMS-main ->>+ LMS-RS: rs.process()
+    LMS-RS -->>- LMS-main:
+    LMS-main ->>+ LMS-User: get sensor value
+    LMS-User -->>- LMS-main: 
+    LMS-main ->>+ LMS-RS: update_channel('chn1', data)
+    LMS-RS -->>- LMS-main:
+    deactivate LMS-main
+
+    Spike-User ->>+ Spike-RH: rh.call('chn1')
+    activate LMS-main
+    LMS-main ->>+ LMS-RS: rs.process()
+    opt Channel not enabled yet 
+      activate LMS-RS
+      Spike-RH ->> LMS-RS: Send 'chn1' enable
+      LMS-RS ->> Spike-BG: Send 'chn1' return value
+      deactivate LMS-RS
+    end
+    LMS-RS -->>- LMS-main:
+    Spike-RH ->>+ Spike-BG: Fetch return value
+    Spike-BG -->>- Spike-RH:
+    Spike-RH -->>- Spike-User: 
+
+    LMS-main ->>+ LMS-User: get sensor value
+    LMS-User -->>- LMS-main: 
+    LMS-main ->>+ LMS-RS: update_channel('chn1', data)
+    LMS-RS ->> Spike-BG: Send 'chn1' return value
+    LMS-RS -->>- LMS-main:
+    deactivate LMS-main
+
+    Spike-User ->>+ Spike-RH: rh.call('chn1')
+    Spike-RH ->>+ Spike-BG: Fetch return value
+    Spike-BG -->>- Spike-RH:
+    Spike-RH -->>- Spike-User: 
+    
+    activate LMS-main
+    LMS-main ->>+ LMS-RS: rs.process()
+    LMS-RS -->>- LMS-main:
+    LMS-main ->>+ LMS-User: get sensor value
+
+    Spike-User ->>+ Spike-RH: rh.call('chn1')
+    Spike-RH ->>+ Spike-BG: Fetch return value
+    Spike-BG -->>- Spike-RH:
+    Spike-RH -->>- Spike-User: 
+
+    LMS-User -->>- LMS-main: 
+    LMS-main ->>+ LMS-RS: update_channel('chn1', data)
+    LMS-RS ->> Spike-BG: Send 'chn1' return value
+    LMS-RS -->>- LMS-main:
+    deactivate LMS-main
+
+    Spike-User ->>+ Spike-RH: rh.call('chn1')
+    Spike-RH ->>+ Spike-BG: Fetch return value
+    Spike-BG -->>- Spike-RH:
+    Spike-RH -->>- Spike-User: 
+```
+
+### Blocking library
 If only a blocking library is available, you can run that in a separate thread like:
 ```python
 import _thread
