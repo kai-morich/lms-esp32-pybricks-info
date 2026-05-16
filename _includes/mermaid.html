@@ -1,0 +1,10 @@
+<!-- https://stuff-things.net/2025/01/19/mermaid-diagramming-in-jekyll-in-2025/ -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    mermaid.initialize({startOnLoad:true});
+    await mermaid.run({
+      querySelector: '.language-mermaid',
+    });
+  });
+</script>

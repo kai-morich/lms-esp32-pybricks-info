@@ -1,3 +1,7 @@
+---
+mermaid: true
+---
+
 # Channel vs. Command
 
 Communication variants between the [LMS-ESP32 board](https://www.antonsmindstorms.com/product/wifi-python-esp32-board-for-mindstorms/) from Antons Mindstorms and LEGO&reg; Spike running [Pybricks](https://pybricks.com/)
