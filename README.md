@@ -5,6 +5,7 @@ This repo provides some info on using [LMS-ESP32-v2.0 board](https://www.antonsm
 * [Geekservo](servo)
 * [Channel vs. Command](channel)
 * [Color sensors](color-sensors)
+* [Light sensor arrays](light-sensor-arrays)
 * [Distance sensors](distance-sensors)
 * [PixyCam2](pixy2)
 * [Power supply with voltage monitoring](power-supply)
