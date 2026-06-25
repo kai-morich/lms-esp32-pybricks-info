@@ -4,6 +4,7 @@ This repo provides some info on using [LMS-ESP32-v2.0 board](https://www.antonsm
 * [Minimal example](minimal)
 * [Geekservo](servo)
 * [Channel vs. Command](channel)
+* [PUPRemote vs. uRemote](uremote)
 * [Color sensors](color-sensors)
 * [Light sensor arrays](light-sensor-arrays)
 * [Distance sensors](distance-sensors)
