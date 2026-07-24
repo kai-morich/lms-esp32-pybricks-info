@@ -229,10 +229,10 @@ If you use multiple commands or channels, the first `call` to a different comman
 
 If you want to switch fast between multiple sensors, better use one channel.
 
-## Interval > 500 msec between rs.process() invocations
+## Interval > 100 msec between rs.process() invocations
 
-As mentioned in the [protocol analysis](https://github.com/pybricks/technical-info/blob/master/uart-protocol.md#uart-device-synchronization) the Spike sends a heartbeat each 100 msec which is answered by `rs.process()`. If this does not happen in time, the LMS-ESP32 is marked as dead, `call` aborts with `ENODEV error` and if your LMS-ESP32 is 5V powered by Spike (`PUPRemoteSensor(power=True)`) the power is turned off.  
-Looks like the Spike does some retries before marking the LMS-ESP32 as dead. In my tests the actual limit was 500 msec. 
+As mentioned in the [protocol analysis](https://github.com/pybricks/technical-info/blob/master/uart-protocol.md#uart-device-synchronization) the Spike sends a heartbeat each 100 msec which is answered by `rs.process()`. If this does not happen in time, the LMS-ESP32 is marked as dead, `call` aborts with `ENODEV error` and if your LMS-ESP32 is 5V powered by Spike (`PUPRemoteSensor(power=True)`) the power is turned off. 
+Sometimes works for up to 200 msec, but conditions are unclear.
 
 __Command__: The duration of your commands must be shorter.
 
