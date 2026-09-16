@@ -1,25 +1,6 @@
 ## FAQ
 
 [//]: ################################
-<details><summary>Performance</summary>
-
-Duration for a loop executing 1000 x [rgb_to_hsv](https://github.com/kai-morich/lms-esp32-pybricks-info/blob/main/gy-33/gy33_color.py#L4):
-
-| Hardware | Duration [msec] |
-| --------- | --------- |
-| typical PC | &nbsp;&nbsp;&nbsp;&nbsp;0.4 |
-| LMS-ESP32 | 280 |
-| Spike with Pybricks | 640 |
-
-It's slower by orders of magnitude!
-
-Avoid f-strings in timing sensitive loops, e.g  `print(f'x {a} {b} {c}')` takes 1.3 msec and `print('x',a,b,c)` takes 0.4 msec.
-
-You should be aware that a `rh.call(...)` already takes ~10 msec.
-</details>
-
-
-[//]: ################################
 <details><summary>IDE</summary>
 
 ## Thonny
@@ -27,7 +8,30 @@ You should be aware that a `rh.call(...)` already takes ~10 msec.
 Start simple with [Thonny](https://thonny.org/). Thonny typically edits files directly on the device, so you have no local copy.
 To have a local copy, git integration, ... use VS Code with a MicroPython aware extension.
 
-## VS Code + Pymakr extension
+## VS Code + extension
+
+| Extension | Development Experience | Comment |
+| ---- | ------- | ------- |
+| [MicroPico](https://marketplace.visualstudio.com/items?itemName=paulober.pico-w-go) | :green_circle: | comes with MicroPython stubs. Works well with ESP32 as of version 4.4.0. |
+| [Pymakr](https://marketplace.visualstudio.com/items?itemName=pycom.Pymakr) | :yellow_circle: | not maintained any more |
+| [MPY Workbench](https://marketplace.visualstudio.com/items?itemName=DanielBucam.mpy-workbench) | :yellow_circle: |
+| [Micropython-Workbench](https://marketplace.visualstudio.com/items?itemName=WebForks.MicroPython-WorkBench) | :yellow_circle: | fork of MPY Workbench |
+
+### MicroPico 
+
+After _Ctrl+Shift+P > MicroPico: Initialize MicroPico Project_ use the _All commands_ button in the status bar to download MicroPython stubs and in Global Settings add _upload_ and _uploadproject_ to the statusbar buttons.
+
+Add to your project `.vscode/settings.json`:
+```json
+    "micropico.softResetAfterUpload": true,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingModuleSource": "none"
+    }
+```
+
+Use the _Upload_ button if only the current file was edited to upload and restart `main.py`. If more files were changed use _Upload Project_.
+
+### Pymakr
 
 The  _Pymakr Preview_ extension is not updated since late 2022, but works most of the time.  
 Sometimes does not respond to commands and using <kbd>Ctrl</kbd>+<kbd>C</kbd> in the terminal helps.  
@@ -35,32 +39,21 @@ Sometimes gets stuck during file transfer and only solution I found so far is re
 Usage is a bit obscure, after configured you basically need these 3 underlined buttons in the Explorer tree that are only shown when hovering over the line.\
 ![](docs/pymakr.png)
 
-To exclude files from sync (e.g. typings folder) add to `py_ignore` list in `pymakr.conf` file.
-
-## VS Code + MicroPico extension
-
-Comes with integrated stubs.
-Works good with Pi Zero. Works somewhat with ESP32, but has significant issues: sometimes no REPL, closing port hangs, cannot reconnect, ...
-
-## VS Code + MicroPython-Workbench extension
-
-Under evaluation.
-
-To exclude files from sync (e.g. typings folder) add to `.mpy-workbench/.mpyignore` file. If the folder or file does not exist, create with _Check for difference_ action.
-
 ## VS Code Syntax Highlighting
 
-For syntax highlighting add the micropython-esp32-stubs to your `typings` folder as described [here](https://micropython-stubs.readthedocs.io/en/main/) and
-add this folder to `py_ignore` in your `pymakr.conf` file.
+MicroPico comes with stubs. For all other extensions you can put the micropython-esp32-stubs to your `typings` folder as described [here](https://micropython-stubs.readthedocs.io/en/main/) and exclude upload of this folder with `.mpy-workbench/.mpyignore` or `pymakr.conf/py_ignore`.
 
-Neopixel and other functionality is already included in the standard MicroPython distribution, but some modules are LMS-ESP32 specific, so you should copy additional files into your typings folder:
+</details>
 
-| module | file |
-| ------ | ---- |
-| [PUPRemote](https://docs.antonsmindstorms.com/en/latest/Software/PUPRemote/docs/index.html) | [pupremote.py](https://github.com/antonvh/PUPRemote/blob/main/src/pupremote.py) |
-| [rcservo](https://github.com/antonvh/rcservo) | [servo.py](https://github.com/antonvh/rcservo/blob/main/servo.py) |
-| ~~mpy_robot_tools [servo](https://docs.antonsmindstorms.com/en/latest/Software/mpy-robot-tools/Docs/index.html#mpy-robot-tools-servo-module)~~ | ~~[servo.py](https://github.com/antonvh/mpy-robot-tools/blob/1d9d5354e4c8b4bf01d9a75072e47c5b9629cdff/mpy_robot_tools/servo.py)~~ |
-| mpy_robot_tools ... | ... |
+
+[//]: ################################
+<details><summary>Additional Modules</summary>
+
+Some files are not included in all [firmwares](https://firmware.antonsmindstorms.com/) or are outdated. Copy these files into your project. If you use the files from the firmware but want syntax highlighting, copy into `typings` folder instead.
+| module | file | comment | 
+| ------ | ---- |-------- |
+| [PUPRemote](https://docs.antonsmindstorms.com/en/latest/Software/PUPRemote/docs/index.html) | [pupremote.py](https://github.com/antonvh/PUPRemote/blob/main/src/pupremote.py) + [lpf2.py](https://github.com/antonvh/PUPRemote/blob/main/src/lpf2.py) | could be outdated in the firmware, e.g. missing PyBricks 4.0 support |
+| [rcservo](https://github.com/antonvh/rcservo) | [servo.py](https://github.com/antonvh/rcservo/blob/main/servo.py) | not included in all firmwares |
 </details>
 
 [//]: ################################
@@ -90,15 +83,15 @@ So should work with 5V powered sensors, but we are on the safer side, if the dat
 </details>
 
 [//]: ################################
-<details><summary>More than 8 commands</summary>
+<details><summary>More than 8 PUPRemote commands</summary>
 
-Use [MicroPython firmware](https://firmware.antonsmindstorms.com/) >= 20250617
+Use MicroPython [firmware](https://firmware.antonsmindstorms.com/) >= 20250617
 </details>
 
 [//]: ################################
 <details><summary>Type warnings at / after PUPRemoteHub.call()</summary>
 
-Use firmware > 20251228 or type hint comments:
+Use MicroPython [firmware](https://firmware.antonsmindstorms.com/) > 20251228 or type hint comments:
 
 VSCode shows Pylance warnings as red weavy underlines at the rh.call() line or at the next usage of the result.
 
@@ -108,4 +101,22 @@ As `rh.call()` can return different number of values and types, the _Pylance_ ba
     b = rh.call('tof') # type: int # pyright: ignore[reportAssignmentType]
     b = b + 1
 ```
+</details>
 
+[//]: ################################
+<details><summary>Performance</summary>
+
+Duration for a loop executing 1000 x [rgb_to_hsv](https://github.com/kai-morich/lms-esp32-pybricks-info/blob/main/gy-33/gy33_color.py#L4):
+
+| Hardware | Duration [msec] |
+| --------- | --------- |
+| typical PC | &nbsp;&nbsp;&nbsp;&nbsp;0.4 |
+| LMS-ESP32 | 280 |
+| Spike with Pybricks | 640 |
+
+It's slower by orders of magnitude!
+
+Avoid f-strings in timing sensitive loops, e.g  `print(f'x {a} {b} {c}')` takes 1.3 msec and `print('x',a,b,c)` takes 0.4 msec.
+
+You should be aware that a `rh.call(...)` already takes ~10 msec.
+</details>
