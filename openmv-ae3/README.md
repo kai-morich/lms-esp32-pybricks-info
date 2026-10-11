@@ -12,8 +12,7 @@ the Camera can be connected to the LMS-ESP32 with a _Qwiic_ cable or to the LEGO
 See 'Powered Up' column at Pybricks [generic UART device](https://docs.pybricks.com/en/v4.0.0/iodevices/uartdevice.html) for wire ordering.  
 __Note__: double check polarity after soldering GND and 3.3V. Reversed polarity or connecting motor 8V to the TX/RX pins will fry the camera.
 
-![](adapter-top.jpg) ![](adapter-bottom.jpg)
-
+![](adapter-top.jpg) ![](adapter-bottom.jpg) ![](adapter-shrink.jpg)
 
 Communication works well with Anton's [uremote library](https://www.antonsmindstorms.com/2026/06/22/openmv-ae3-spike-line-follower/) to LMS-ESP32 and LEGO Spike.
 
