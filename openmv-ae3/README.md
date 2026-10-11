@@ -15,4 +15,3 @@ __Note__: double check polarity after soldering GND and 3.3V. Reversed polarity 
 ![](adapter-top.jpg) ![](adapter-bottom.jpg) ![](adapter-shrink.jpg)
 
 Communication works well with Anton's [uremote library](https://www.antonsmindstorms.com/2026/06/22/openmv-ae3-spike-line-follower/) to LMS-ESP32 and LEGO Spike.
-
